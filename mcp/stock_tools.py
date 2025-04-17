@@ -3,20 +3,41 @@ from fastmcp import FastMCP
 
 from tqdm import tqdm
 from typing import Dict, Any, Optional
-import yfinance as yf
 
+import os
 import sys
-sys.path.append("./")
-from utils import rename_columns
-from models import TickerList, Interval
+
+__curdir__ = os.getcwd()
+if "mcp" in __curdir__:
+    sys.path.append("../src")
+else:
+    sys.path.append("./src")
+
+from stock_utils import get_stock_prices, calculate_cagr
+from stock_models import TickerList, Interval
 
 mcp = FastMCP(
     name="Stock Analysis Tool 📈",
     instructions="""This server provides tools to get stock prices and gets the compounded annual growth rate (CAGR) of tickers.
         Call `get_stock_price` to get the current price of a stock ticker, and `get_cagr` to calculate the CAGR 
         of a stock ticker of interest.""",
-    port=3000,
 )
+
+@mcp.resource(
+    uri="data://app-status",
+    name="ApplicationStatus",
+    description="Provides current status of application.",
+    mime_type="application/json",
+    tags={"monitoring", "status"}
+)
+def get_application_status() -> Dict[str, Any]:
+    """
+    Internal function description ignored if description is provided above.
+    """
+    return {
+        "status": "ok",
+        "version": mcp.settings.version
+    }
 
 @mcp.tool()
 def get_stock_price(
@@ -31,10 +52,7 @@ def get_stock_price(
     prices = dict()
     for ticker in tqdm(ticker_list.tickers, desc="Fetching stock prices"):
         try:
-            data = rename_columns(
-                ticker = ticker, 
-                df = yf.Ticker(ticker).history(period=ticker_list.period)
-            )
+            data = get_stock_prices(ticker, period=ticker_list.period)
             prices[f'{ticker}_price'] = data.to_dict(orient='records')
         except Exception as e:
             prices[ticker] = str(e)
@@ -49,33 +67,7 @@ def cagr(
     ticker: str,
     period: Optional[Interval] = "10y"    
 ):
-    """Function to compute CAGR of a stock ticker of interest 
-    across a time interval."""
-    
-    df = rename_columns(
-        ticker=ticker,
-        df=yf.Ticker(ticker).history(period=period),
-    )
-    df = df.sort_index()
-
-    # Renamed column will be like "AAPL_close"
-    close_col = f"{ticker}_close"
-
-    if close_col not in df.columns:
-        raise ValueError(f"Expected column '{close_col}' not found in DataFrame.")
-
-    start_date, end_date = df.index[0], df.index[-1]
-    start_price = df[close_col].iloc[0]
-    end_price   = df[close_col].iloc[-1]
-
-    # Compute approximate number of years accounting for leap years
-    delta_days = (end_date - start_date).days
-    years = delta_days / 365.25
-    if years <= 0:
-        raise ValueError("Time period must span more than 0 years.")
-
-    cagr_value = (end_price / start_price)**(1/years) - 1
-    return f"{round(100 * cagr_value, 1)}%"
+   return calculate_cagr(ticker=ticker, period=period)
 #%%
 if __name__ == "__main__":
     print("🚀Starting server... ")
