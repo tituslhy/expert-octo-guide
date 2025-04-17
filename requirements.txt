@@ -1,4 +1,6 @@
 pandas
 yfinance
 fastmcp
+fastapi
+fastapi-mcp
 pydantic
