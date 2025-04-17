@@ -26,18 +26,17 @@ else:
         "./docs/paul_graham_essay.txt"
     ).resolve()
 
-if file_path.exists():
-    file_resource = FileResource(
-        uri=f"file://{file_path.as_posix()}",
-        path = file_path,
-        name="Paul Graham's essay",
-        description="Paul Graham's personal essay",
-        mime_type="text/markdown",
-        tags={"essay"}
-    )
+file_resource = FileResource(
+    uri=f"file://{file_path.as_posix()}",
+    path = file_path,
+    name="Paul Graham's essay",
+    description="Paul Graham's personal essay",
+    mime_type="text/markdown",
+    tags={"essay"}
+)
 
-    mcp.add_resource(file_resource)
-    print("resource added!")
+mcp.add_resource(file_resource)
+print("resource added!")
 
 ## Invoking Ollama from OpenAI!
 llm_client = OpenAI(
@@ -53,7 +52,7 @@ async def generate_poem(topic: str, context: Context) -> str:
     )
     return response
 
-@mcp.tool()
+@mcp.tool() #fix the name of the tool
 async def generate_summary(
     context: Context,
     doc_uri: str = file_resource.uri,

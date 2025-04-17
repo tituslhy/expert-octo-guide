@@ -1,15 +1,13 @@
 from fastmcp import FastMCP
-from mcp.stock_tools import mcp as stock_mcp
-from mcp.writing_tools import mcp as writing_mcp
-from mcp.weather_tools import mcp as weather_mcp
+from protocols.stock_tools import mcp as stock_mcp
+from protocols.writing_tools import mcp as writing_mcp
+from protocols.weather_tools import mcp as weather_mcp
 
 mcp = FastMCP("Writing and stock analysis tools")
 
-mcp.mount(
-    "stock_tools", stock_mcp,
-    "writing_tools", writing_mcp,
-    "weather_tools", weather_mcp
-)
+mcp.mount("stock_tools", stock_mcp)
+mcp.mount("writing_tools", writing_mcp)
+mcp.mount("weather_tools", weather_mcp)
 
 @mcp.tool()
 def ping(): 
