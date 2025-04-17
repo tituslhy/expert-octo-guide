@@ -43,6 +43,7 @@ llm_client = OpenAI(
     base_url="http://localhost:11434/v1/",
     api_key="ollama", #required but not used.
 )
+
 @mcp.tool()
 async def generate_poem(topic: str, context: Context) -> str:
     """Generates a short poem about a given topic"""

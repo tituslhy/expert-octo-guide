@@ -3,7 +3,7 @@ from protocols.stock_tools import mcp as stock_mcp
 from protocols.writing_tools import mcp as writing_mcp
 from protocols.weather_tools import mcp as weather_mcp
 
-mcp = FastMCP("Writing and stock analysis tools")
+mcp = FastMCP("Writing and stock analysis tools", port=8000)
 
 mcp.mount("stock_tools", stock_mcp)
 mcp.mount("writing_tools", writing_mcp)

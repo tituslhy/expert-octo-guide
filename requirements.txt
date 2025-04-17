@@ -3,6 +3,8 @@ yfinance
 fastmcp
 fastapi
 fastapi-mcp
+openai
 pydantic
 llama-index
+llama-index-tools-mcp
 llama-index-llms-ollama
