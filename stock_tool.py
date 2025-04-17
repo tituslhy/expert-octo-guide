@@ -31,7 +31,10 @@ def get_stock_price(
     prices = dict()
     for ticker in tqdm(ticker_list.tickers, desc="Fetching stock prices"):
         try:
-            data = rename_columns(ticker = ticker, df = yf.Ticker(ticker).history(period=ticker_list.period))
+            data = rename_columns(
+                ticker = ticker, 
+                df = yf.Ticker(ticker).history(period=ticker_list.period)
+            )
             prices[f'{ticker}_price'] = data.to_dict(orient='records')
         except Exception as e:
             prices[ticker] = str(e)
