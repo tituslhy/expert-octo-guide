@@ -4,3 +4,5 @@ fastmcp
 fastapi
 fastapi-mcp
 pydantic
+llama-index
+llama-index-llms-ollama

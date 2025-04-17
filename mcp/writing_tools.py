@@ -1,4 +1,5 @@
 #%%
+import os
 from fastmcp import FastMCP, Context
 from fastmcp.resources import FileResource
 from fastmcp.client.sampling import (
@@ -15,20 +16,28 @@ mcp = FastMCP(
     name = "Writing tools",
 )
 
-# resume_path = Path(
-#     "~/Documents/Lim Hsien Yong (Titus) Resume.pdf"
-# ).expanduser().resolve()
+__curdir__ = os.getcwd()
+if "mcp" in __curdir__:
+    file_path = Path(
+        "../docs/paul_graham_essay.txt"
+    ).resolve()
+else:
+    file_path = Path(
+        "./docs/paul_graham_essay.txt"
+    ).resolve()
 
-# resume_resource = FileResource(
-#     uri=f"file://{resume_path.as_posix()}",
-#     path = resume_path,
-#     name="Resume",
-#     description="Titus Lim's resume",
-#     mime_type="bytes/pdf",
-#     tags={"resume", "pdf"},
-# )
+if file_path.exists():
+    file_resource = FileResource(
+        uri=f"file://{file_path.as_posix()}",
+        path = file_path,
+        name="Paul Graham's essay",
+        description="Paul Graham's personal essay",
+        mime_type="text/markdown",
+        tags={"essay"}
+    )
 
-# mcp.add_resource(resume_resource)
+    mcp.add_resource(file_resource)
+    print("resource added!")
 
 ## Invoking Ollama from OpenAI!
 llm_client = OpenAI(
@@ -45,16 +54,16 @@ async def generate_poem(topic: str, context: Context) -> str:
     return response
 
 @mcp.tool()
-async def generate_professional_summary(
-    resume_uri: str,
+async def generate_summary(
     context: Context,
+    doc_uri: str = file_resource.uri,
 ) -> str:
-    """Generates a cover letter based on a resume"""
-    doc_resource = await context.read_resource(resume_uri)
+    """Generates a summary based on a document"""
+    doc_resource = await context.read_resource(doc_uri)
     doc_content = doc_resource[0].content
     response = await context.sample(
-        f"Write a cover letter based on the following resume: {doc_content}",
-        system_prompt = "You are a professional resume writer who writes compelling professional summaries from resumes."
+        f"Summarize the following document: {doc_content}",
+        system_prompt = "You are a professional writer who excels at distilling essentials from essays."
     )
     return response
 
@@ -77,6 +86,7 @@ async def sampling_handler(
         model="qwen2.5"
     )
     return response.choices[0].message.content
+
 #%%
 if __name__ == "__main__":
     print("🚀Starting server... ")
