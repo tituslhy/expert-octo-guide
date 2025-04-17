@@ -75,6 +75,7 @@ def cagr(
     return f"{round(100 * cagr_value, 1)}%"
 #%%
 if __name__ == "__main__":
+    print("🚀Starting server... ")
     mcp.run(
         transport="sse"
     )
