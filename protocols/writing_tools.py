@@ -100,7 +100,8 @@ async def chat_with_docs(
         messages=[
             {"role": "system",  "content": prompt}
         ],
-        model="qwen2.5"
+        model="qwen2.5",
+        temperature=0
     )
     return response.choices[0].message.content
 
