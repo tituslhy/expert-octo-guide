@@ -67,7 +67,7 @@ async def llm_agent(message: cl.Message):
 
 @cl.on_mcp_connect
 async def on_mcp_connect(connection):
-    """Handler to connec to an MCP server. 
+    """Handler to connect to an MCP server. 
     Lists tools available on the server and connects these tools to
     the LLM agent."""
     
@@ -94,7 +94,7 @@ async def on_mcp_connect(connection):
             f"Found {len(new_tools)} tools from {connection.name} MCP server."
         ).send()
     except Exception as e:
-        await cl.Message(f"Error listing tools from MCP server: {str(e)}").send()
+        await cl.Message(f"Error conecting to tools from MCP server: {str(e)}").send()
 
 @cl.on_mcp_disconnect
 async def on_mcp_disconnect(name: str):
