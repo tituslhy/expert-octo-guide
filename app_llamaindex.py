@@ -11,6 +11,8 @@ llm = Ollama(model="qwen2.5", temperature=0)
 
 @cl.on_chat_start
 async def start():
+    """Handler for chat start events. Sets session variables."""
+    
     cl.user_session.set(
         "mcp_tools", {}
     )
@@ -34,6 +36,15 @@ async def start():
 
 @cl.on_message
 async def on_message(message: cl.Message):
+    """Handler for message received events. Pings llm agent."""
+    
+    response = await llm_agent(message)
+    await cl.Message(content=response).send()
+
+@cl.step(type="llm")
+async def llm_agent(message: cl.Message):
+    """Handler for LLM agent operations."""
+    
     memory = cl.user_session.get("memory")
     # Retrieve the chat history
     chat_history = memory.get()
@@ -52,10 +63,14 @@ async def on_message(message: cl.Message):
         )
     )
     cl.user_session.set("memory", memory)
-    await cl.Message(content=str(response)).send()
+    return str(response)
 
 @cl.on_mcp_connect
 async def on_mcp_connect(connection):
+    """Handler to connec to an MCP server. 
+    Lists tools available on the server and connects these tools to
+    the LLM agent."""
+    
     mcp_tools = cl.user_session.get("mcp_tools", {})
     try:
         mcp_client = BasicMCPClient(connection.url)
@@ -83,6 +98,9 @@ async def on_mcp_connect(connection):
 
 @cl.on_mcp_disconnect
 async def on_mcp_disconnect(name: str):
+    """Handler to handle disconnects from an MCP server.
+    Updates tool list available for the LLM agent.
+    """
     mcp_tools = cl.user_session.get("mcp_tools", {})
     if name in mcp_tools:
         del mcp_tools[name]
