@@ -5,11 +5,15 @@ This little GitHub repository introduces the features of model context protocols
     <img src="./images/mcp_banner.png">
 </p>
 
+## Notes
+In this repository I use a local LLM deployed on Ollama!
+
 ### To install requirements
 ```pip install -r requirements.txt```
 
 ### To spin up the chainlit applications
-```chainlit run <file_name>.py```
+Note that I've set the port to 8001 because Chainlit's default port is 8000 which conflicts with the MCP endpoint deployment (that default port is also 8000).
+```chainlit run app_llamaindex.py --port 8001```
 
 ### To spin up the mcp endpoint
 ```uv run tools_main.py --server_type=sse```
