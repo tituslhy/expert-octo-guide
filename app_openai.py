@@ -13,7 +13,7 @@ client = AsyncOpenAI(
 cl.instrument_openai()
 
 settings = {
-    "model": "qwen2.5",
+    "model": "qwen2.5", #name of your LLM here
     "temperature": 0,
     "stream": True,
 }
@@ -274,6 +274,3 @@ def format_calltoolresult_content(result):
     if text_contents:
         return "\n".join(text_contents)
     return str(result)
-
-if __name__ == "__main__":
-    print("Starting Chainlit app with LM Studio and MCP integration...")
