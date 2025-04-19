@@ -26,6 +26,7 @@ Note that I've set the port to 8001 because Chainlit's default port is 8000 whic
 |   |- api.py                   <- Simple FastAPI implementation endpoints
 |-  docs                        <- Contains Paul Graham's essay to be used by MCP endpoints
 |-  notebooks
+|    |- test_fastapi_fastmcp.ipynb  <- Short notebook showing API and MCP interactions.
 |    |- test_tools_main.ipynb       <- The main notebook testing mcp deployments
 |-  protocols
 |   |- stock_tools.py           <- MCP for stock tools
