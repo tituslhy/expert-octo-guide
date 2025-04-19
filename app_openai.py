@@ -6,7 +6,7 @@ from mcp.types import CallToolResult, TextContent
 
 
 client = AsyncOpenAI(
-    base_url="http://localhost:11434/v1/",
+    base_url="http://localhost:11434/v1/", 
     api_key="ollama", #required but not used.
 )
 
