@@ -230,16 +230,6 @@ async def on_message(message: cl.Message):
         error_message = f"Error: {str(e)}"
         await cl.Message(content=error_message).send()
 
-        troubleshooting = (
-            "Troubleshooting tips:\n"
-            "1. Verify LM Studio is running\n"
-            "2. Check that a model is loaded\n"
-            "3. Confirm the LM Studio server is started on port 1234\n"
-            "4. Make sure the model supports the OpenAI chat completions API format with tools"
-        )
-        await cl.Message(content=troubleshooting).send()
-
-
 async def format_tools_for_openai(tools: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     openai_tools = []
 
