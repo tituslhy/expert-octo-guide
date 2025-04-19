@@ -2,7 +2,7 @@
 This little GitHub repository introduces the features of model context protocols (MCP), implementing MCP integrations with Chainlit and LlamaIndex.
 
 <p align="center">
-    <img src="./images/mcp_banner.jpg">
+    <img src="./images/mcp_banner.png">
 </p>
 
 ### To install requirements
