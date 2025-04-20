@@ -5,6 +5,8 @@ This little GitHub repository introduces the features of model context protocols
     <img src="./images/mcp_banner.png">
 </p>
 
+This repository is a companion resource for the article: [Model context protocol - hype or necessity?](https://medium.com/mitb-for-all/model-context-protocol-hype-or-necessity-998874d95bc6)
+
 ## Notes
 In this repository I use a local LLM deployed on Ollama!
 
